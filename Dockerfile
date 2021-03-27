@@ -79,7 +79,8 @@ WORKDIR /home/user
 RUN git clone https://github.com/google/mediapipe && \
     cd mediapipe && \
     chmod +x ./setup_android_sdk_and_ndk.sh && \
-    yes | ./setup_android_sdk_and_ndk.sh '' '' ''
+    yes | ./setup_android_sdk_and_ndk.sh '' '' '' && \
+    cd .. && rm -r mediapipe
 
 RUN curl -s "https://get.sdkman.io" | bash && \
     bash -c ". $HOME/.sdkman/bin/sdkman-init.sh && sdk install gradle 6.7"
