@@ -238,15 +238,6 @@ http_archive(
     url = "https://github.com/opencv/opencv/releases/download/3.2.0/opencv-3.2.0-ios-framework.zip",
 )
 
-# You may run setup_android.sh to install Android SDK and NDK.
-android_ndk_repository(
-    name = "androidndk",
-)
-
-android_sdk_repository(
-    name = "androidsdk",
-)
-
 # iOS basic build deps.
 
 http_archive(
@@ -385,3 +376,13 @@ http_archive(
 
 load("@org_tensorflow//tensorflow:workspace.bzl", "tf_workspace")
 tf_workspace(tf_repo_name = "org_tensorflow")
+
+android_ndk_repository(
+    name = "androidndk",
+    path = "/home/user/Android/Sdk/ndk-bundle/android-ndk-r18b",
+)
+
+android_sdk_repository(
+    name = "androidsdk",
+    path = "/home/user/Android/Sdk"
+)

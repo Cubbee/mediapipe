@@ -63,7 +63,26 @@ azel-${BAZEL_VERSION}-installer-linux-x86_64.sh" && \
     /bazel/installer.sh  && \
     rm -f /bazel/installer.sh
 
-COPY . /mediapipe/
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    sudo zip unzip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV USER_ID=1000
+RUN useradd --shell /bin/bash -u $USER_ID -p $(openssl passwd -1 user) -o -c "" -m user
+RUN usermod -aG sudo user
+
+USER 1000
+
+WORKDIR /home/user
+
+RUN git clone https://github.com/google/mediapipe && \
+    cd mediapipe && \
+    chmod +x ./setup_android_sdk_and_ndk.sh && \
+    yes | ./setup_android_sdk_and_ndk.sh '' '' ''
+
+RUN curl -s "https://get.sdkman.io" | bash && \
+    bash -c ". $HOME/.sdkman/bin/sdkman-init.sh && sdk install gradle 6.7"
 
 # If we want the docker image to contain the pre-built object_detection_offline_demo binary, do the following
 # RUN bazel build -c opt --define MEDIAPIPE_DISABLE_GPU=1 mediapipe/examples/desktop/demo:object_detection_tensorflow_demo
